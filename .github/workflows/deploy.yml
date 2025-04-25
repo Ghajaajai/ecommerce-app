@@ -31,6 +31,5 @@ jobs:
         script: |
           cd /var/www/mywebsite/ecommerce-app
           npm install
-          pm2 start server.js --name "ecommerce-app"
+          pm2 start server.js --name "ecommerce-app" -f
           pm2 save
-          pm2 startup systemd

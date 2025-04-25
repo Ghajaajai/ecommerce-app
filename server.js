@@ -4,7 +4,7 @@ const AWS = require('aws-sdk');
 const app = express();
 
 const rds = {
-  host: 'ENDPOINT_RDS',
+  host: 'database-1.cf2m4wemiia9.ap-southeast-1.rds.amazonaws.com',
   user: 'admin',
   password: 'admin1234',
   database: 'ecommerce'
@@ -21,7 +21,7 @@ AWS.config.update({
 const s3 = new AWS.S3();
 
 async function fetchPosts() {
-  const bucketName = 'blog-bucket-uts'; 
+  const bucketName = 'ecommerce-product-bucket'; 
   const params = {
     Bucket: bucketName,
     MaxKeys: 100 
@@ -51,7 +51,7 @@ app.get('/produk', async (req, res) => {
       
       const data = rows.map((item, index) => ({
         ...item,
-        image: `https://s3-ap-southeast-1.amazonaws.com/blog-bucket-uts/${images[index]}`
+        image: `https://s3-ap-southeast-1.amazonaws.com/ecommerce-product-bucket/${images[index]}`
       }));
 
       res.json(data);
@@ -62,4 +62,4 @@ app.get('/produk', async (req, res) => {
   }
 });
 
-app.listen(80, () => console.log("Web berjalan di port 80"));
+app.listen(3000, () => console.log("Web berjalan di port 3000"));
