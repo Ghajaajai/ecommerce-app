@@ -1,0 +1,46 @@
+name: CI/CD Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Copy to EC2
+      uses: appleboy/scp-action@v0.1.10  
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ec2-user
+        key: ${{ secrets.EC2_KEY }}
+        source: "./*"  
+        target: /home/ec2-user/app
+
+    - name: Install dependencies on EC2 (optional)
+      uses: appleboy/ssh-action@v0.1.10  
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ec2-user
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          cd /home/ec2-user/app
+          npm install  # Jika Anda perlu menginstal dependencies setelah menyalin file
+
+    - name: Run app with PM2
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ec2-user
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          cd /home/ec2-user/app
+          # Install PM2 jika belum terpasang
+          npm install pm2@latest -g
+          pm2 start server.js --name "ecommerce-app"  # Menjalankan aplikasi menggunakan PM2
+          pm2 save  # Menyimpan konfigurasi PM2 untuk memastikan aplikasi tetap berjalan
+          pm2 startup systemd  # Mengatur agar PM2 otomatis berjalan setelah reboot

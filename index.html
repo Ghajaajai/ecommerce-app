@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>E-Commerce Ghaza</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>My Product List</h1>
+  <div id="produk-list"></div>
+  <script>
+    fetch('/produk')
+      .then(res => res.json())
+      .then(data => {
+        const div = document.getElementById('produk-list');
+        div.innerHTML = data.map(p => `
+          <div class="card">
+            <img src="${p.image}" alt="${p.nama}">
+            <h3>${p.nama}</h3>
+            <p>Harga: Rp ${p.harga}</p>
+          </div>
+        `).join('');
+      });
+  </script>
+</body>
+</html>

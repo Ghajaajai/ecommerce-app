@@ -1,0 +1,17 @@
+body {
+    font-family: sans-serif;
+    background: #f9f9f9;
+    padding: 20px;
+  }
+  .card {
+    background: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    max-width: 300px;
+  }
+  img {
+    width: 100%;
+    height: auto;
+  }
+  
